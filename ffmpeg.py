@@ -14,7 +14,7 @@ for filename in os.listdir(directory_path):
         mp4_file_path = os.path.join(directory_path, filename)
 
         mp3_filename = os.path.splitext(mp4_file_path)[0] + '.mp3'
-        mp3_file_path = os.path.join("/home/juleswhite/projects/music-fr/output", mp3_filename)
+        mp3_file_path = os.path.join("output", mp3_filename)
 
         # Construct the ffmpeg command
         ffmpeg_command = f'ffmpeg -i "{mp4_file_path}" -vn -acodec libmp3lame -q:a 2 "{mp3_file_path}"'

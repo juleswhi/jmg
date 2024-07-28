@@ -1,10 +1,8 @@
 import subprocess
-f = open("playlists.txt")
+f = open("downloads.txt")
 data = f.read()
 
 lines = data.splitlines()
-
-# yt-dlp --flat-playlist -i --print-to-file url file.txt "playlist-url"
 
 i = 1
 total = lines.__len__()
