@@ -1,9 +1,0 @@
-##[pylyzer] failed /home/juleswhite/projects/music-fr/playlist.py 1722197387 375
-.subprocess = pyimport "subprocess"
-
-.f: File!
-.data: Str
-.lines: List(Str, _: Nat)
-.i: {1}
-.total: Nat
-
