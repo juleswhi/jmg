@@ -2,7 +2,7 @@ import os
 import subprocess
 
 # Define the directory containing the MP4 files
-directory_path = 'matthew-output'
+directory_path = 'input'
 
 i = 1
 total = 941
