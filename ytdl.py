@@ -2,6 +2,14 @@ import time
 import os
 import subprocess
 
+import math
+def truncate(number, digits) -> float:
+    nbDecimals = len(str(number).split('.')[1])
+    if nbDecimals <= digits:
+        return number
+    stepper = 10.0 ** digits
+    return math.trunc(stepper * number) / stepper
+
 DOWNLOAD_FILE = "download.txt"
 FULL_DOWNLOAD_FILE = "download_full.txt"
 OUTPUT_DIR = "download_output"
@@ -20,8 +28,8 @@ start_time = time.time()
 
 for line in set(lines):
     if "playlist" in line:
+        print(f"Extracting songs from: {line.strip()}", end="\r")
         _ = subprocess.run(["yt-dlp", "--flat-playlist", "-i", "--print-to-file", "url", FULL_DOWNLOAD_FILE, line], stdout=DEVNULL, stderr=DEVNULL)
-        print(f"Decompressed Playlist: {line.strip()}")
     else:
         fdf.write(f"{line}")
 
@@ -38,6 +46,8 @@ total_elapsed_time = 0
 estimated_elapsed = 0
 average_elapsed = 0
 
+print(f"Songs Found: {total_len}")
+
 for line in lines:
     start = time.time()
     command = f'yt-dlp -o "{OUTPUT_DIR}/%(title)s.%(ext)s" {line.strip()}'
@@ -46,9 +56,12 @@ for line in lines:
     if average_elapsed == 0:
         average_elapsed = (end - start)
     else:
-        average_elapsed = (average_elapsed + (end - start) ) / 2
+        average_elapsed = (float(average_elapsed) + float(end - start) ) / 2
 
     i = i + 1
-    print(f"Complete: {i} / {total_len}, {(i / total_len) * 100}%   |   Elapsed: {end - start}   |   Estimated Time Left: {(total_len - i) * average_elapsed}")
+    estimated_seconds_left = (total_len - i) * average_elapsed
+    print(f"Complete: {i} / {total_len}, {truncate((i / total_len) * 100, 1)}%   |   Elapsed: {truncate(end - start, 0)}   |   Estimated Time Left: {truncate(estimated_seconds_left, 2)}s / {truncate(estimated_seconds_left/60,0)}m   |   Average Elapsed: {truncate(average_elapsed, 1)}", end="\r")
 
 print(f"Finished!\n.Mp4 files are located at: {OUTPUT_DIR}")
+
+os.remove(FULL_DOWNLOAD_FILE)

@@ -1,32 +1,37 @@
+import time
 import os
 import subprocess
 
 # Define the directory containing the MP4 files
-directory_path = 'input'
+directory_path = 'download_output'
+
+import math
+def truncate(number, digits) -> float:
+    nbDecimals = len(str(number).split('.')[1])
+    if nbDecimals <= digits:
+        return number
+    stepper = 10.0 ** digits
+    return math.trunc(stepper * number) / stepper
+
 
 i = 1
-total = 941
+total = os.listdir(directory_path).__len__()
 DEVNULL = open(os.devnull, 'wb')
+print("Starting")
 # Iterate over each file in the directory
 for filename in os.listdir(directory_path):
     if filename.endswith('.mp4'):
-        # Construct the full file paths for the MP4 and the target MP3
+        start = time.time()
         mp4_file_path = os.path.join(directory_path, filename)
 
-        mp3_filename = os.path.splitext(mp4_file_path)[0] + '.mp3'
+        mp3_filename = filename.split(".mp4")[0] + ".mp3"
         mp3_file_path = os.path.join("output", mp3_filename)
 
-        # Construct the ffmpeg command
         ffmpeg_command = f'ffmpeg -i "{mp4_file_path}" -vn -acodec libmp3lame -q:a 2 "{mp3_file_path}"'
 
-        # Execute the ffmpeg command
-        _ = subprocess.run(ffmpeg_command, shell=True, stdout=DEVNULL)
-        print("****************")
-        print("")
-        print(f"Processed: {i} / {total} | {(i / total) * 100}%")
-        print("")
-        print("****************")
+        _ = subprocess.run(ffmpeg_command, shell=True, stdout=DEVNULL, stderr=DEVNULL)
         i = i + 1
+        end = time.time()
+        print(f"Processed: {i} / {total} | {truncate((i / total) * 100, 1)}%  |  Time Taken: {truncate(end - start, 0)}  |  Extrapolated Time: {truncate((end - start) * ( total - i ), 0)}  |  filename: {mp3_file_path}", end="\r")
 
 print("Conversion completed.")
-
