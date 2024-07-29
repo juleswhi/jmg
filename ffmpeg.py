@@ -19,7 +19,7 @@ for f in files:
     os.remove(f)
 
 i = 1
-total = 1000
+total = files.count
 DEVNULL = open(os.devnull, 'wb')
 for filename in os.listdir(directory_path):
     if filename.endswith('.mp4'):
