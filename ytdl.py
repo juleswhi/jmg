@@ -34,7 +34,7 @@ for line in set(lines):
         fdf.write(f"{line}")
 
 end_time = time.time()
-print(f"Time elapsed for playlist conversion: {end_time - start_time}")
+print(f"Time elapsed for playlist conversion: {truncate(end_time - start_time, 0)}")
 fdf.close()
 
 downloads = open(FULL_DOWNLOAD_FILE, "r")
@@ -60,7 +60,7 @@ for line in set(lines):
 
     i = i + 1
     estimated_seconds_left = (total_len - i) * average_elapsed
-    print(f"Complete: {i} / {total_len}, {truncate((i / total_len) * 100, 1)}%   |   Elapsed: {truncate(end - start, 0)}   |   Estimated Time Left: {truncate(estimated_seconds_left, 2)}s / {truncate(estimated_seconds_left/60,0)}m   |   Average Elapsed: {truncate(average_elapsed, 1)}", end="\r")
+    print(f"Complete: {i} / {total_len}, {truncate((i / total_len) * 100, 1)}%   |   Elapsed: {truncate(end - start, 0)}   |   {truncate(estimated_seconds_left/60,0)}   |   Downloaded: {line.strip()}", end="\r")
 
 print(f"Finished!\n.Mp4 files are located at: {OUTPUT_DIR}")
 
