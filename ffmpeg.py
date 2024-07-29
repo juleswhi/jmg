@@ -1,6 +1,7 @@
 import time
 import os
 import subprocess
+import glob
 
 # Define the directory containing the MP4 files
 directory_path = 'download_output'
@@ -13,12 +14,13 @@ def truncate(number, digits) -> float:
     stepper = 10.0 ** digits
     return math.trunc(stepper * number) / stepper
 
+files = glob.glob('output/*')
+for f in files:
+    os.remove(f)
 
 i = 1
-total = os.listdir(directory_path).__len__()
+total = 1000
 DEVNULL = open(os.devnull, 'wb')
-print("Starting")
-# Iterate over each file in the directory
 for filename in os.listdir(directory_path):
     if filename.endswith('.mp4'):
         start = time.time()
@@ -26,12 +28,11 @@ for filename in os.listdir(directory_path):
 
         mp3_filename = filename.split(".mp4")[0] + ".mp3"
         mp3_file_path = os.path.join("output", mp3_filename)
-
         ffmpeg_command = f'ffmpeg -i "{mp4_file_path}" -vn -acodec libmp3lame -q:a 2 "{mp3_file_path}"'
 
-        _ = subprocess.run(ffmpeg_command, shell=True, stdout=DEVNULL, stderr=DEVNULL)
+        _ = subprocess.run(ffmpeg_command, shell=True, stdout=DEVNULL,stderr=DEVNULL)
         i = i + 1
         end = time.time()
-        print(f"Processed: {i} / {total} | {truncate((i / total) * 100, 1)}%  |  Time Taken: {truncate(end - start, 0)}  |  Extrapolated Time: {truncate((end - start) * ( total - i ), 0)}  |  filename: {mp3_file_path}", end="\r")
+        print(f"Processed: {i} / {total}  |  {(i / total) * 100}%  |  Time Taken: {truncate(end - start, 2)}  |  Saved: {mp3_file_path}")
 
 print("Conversion completed.")

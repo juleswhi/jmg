@@ -48,7 +48,7 @@ average_elapsed = 0
 
 print(f"Songs Found: {total_len}")
 
-for line in lines:
+for line in set(lines):
     start = time.time()
     command = f'yt-dlp -o "{OUTPUT_DIR}/%(title)s.%(ext)s" {line.strip()}'
     _ = subprocess.run(command, shell=True, stdout=DEVNULL, stderr=DEVNULL)
