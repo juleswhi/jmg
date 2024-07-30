@@ -30,7 +30,7 @@ def convert_mp4_to_mp3(mp4_file_path):
     ffmpeg_command = f'ffmpeg -i "{mp4_file_path}" -vn -acodec libmp3lame -q:a 2 "{mp3_file_path}"'
     subprocess.run(ffmpeg_command, shell=True, stdout=DEVNULL, stderr=DEVNULL)
     counter[0] += 1
-    print(f"completed: {truncate((counter[0] / total) * 100, 1)}%")
+    print(f"completed: {truncate((counter[0] / total) * 100, 1)}%", end="\r")
 
 with ThreadPoolExecutor(max_workers=10) as executor:
     mp4_files = glob.glob(os.path.join(directory_path, '*.mp4'))
