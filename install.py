@@ -3,6 +3,8 @@
 import subprocess
 import os
 
+BROWSER = "firefox"
+
 def download_playlists_as_mp3(playlist_file, output_directory="downloads"):
     """
     Reads a file with YouTube playlist URLs and downloads them as MP3s
@@ -38,7 +40,7 @@ def download_playlists_as_mp3(playlist_file, output_directory="downloads"):
         # based on the playlist title and index.
         command = [
             "yt-dlp",
-            "--cookies-from-browser", "firefox",
+            "--cookies-from-browser", BROWSER,
             "-x",  # Extract audio
             "--audio-format", "mp3",
             "--audio-quality", "0",
